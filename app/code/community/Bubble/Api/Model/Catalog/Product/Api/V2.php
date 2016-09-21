@@ -71,11 +71,7 @@ class Bubble_Api_Model_Catalog_Product_Api_V2 extends Mage_Catalog_Model_Product
             $simpleSkus = (array) $productData->associated_skus;
             $priceChanges = array();
             if (property_exists($productData, 'price_changes')) {
-                if (key($productData->price_changes) === 0) {
-                    $priceChanges = $productData->price_changes[0];
-                } else {
-                    $priceChanges = $productData->price_changes;
-                }
+                $priceChanges = $productData->price_changes;
             }
             $configurableAttributes = array();
             if (property_exists($productData, 'configurable_attributes')) {

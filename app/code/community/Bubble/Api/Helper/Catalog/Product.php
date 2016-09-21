@@ -152,6 +152,23 @@ class Bubble_Api_Helper_Catalog_Product extends Mage_Core_Helper_Abstract
                     $optionId = $product->getData($attributeCode);
                     $isPercent = 0;
                     $priceChange = 0;
+					
+					if (!empty($priceChanges) ){
+					    try {
+							for($i = 0; $i < count($priceChanges); $i++) {
+							    $key = $priceChanges[$i]->key;
+								$value = $priceChanges[$i]->value;
+								$regexResult;
+								preg_match('/(.*)PRICE:(.*)/', $value, $regexResult);
+								$optionTxt = $regexResult[1];
+								$optionPrice = $regexResult[2];
+								$priceChanges[$key] = array(
+								    $optionTxt => $optionPrice
+								);
+							}
+						} catch (Exception $e){}
+					}
+					
                     if (!empty($priceChanges) && isset($priceChanges[$attributeCode])) {
                         $optionText = $product->getResource()
                             ->getAttribute($attribute['attribute_code'])
