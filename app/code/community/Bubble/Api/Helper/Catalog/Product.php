@@ -152,9 +152,10 @@ class Bubble_Api_Helper_Catalog_Product extends Mage_Core_Helper_Abstract
                     $optionId = $product->getData($attributeCode);
                     $isPercent = 0;
                     $priceChange = 0;
-					// 
+					// * Magento C# Wrapper compatibility code:
 					if (!empty($priceChanges) ){
 					    try {
+						    $priceChangesValues = array();
 							for($i = 0; $i < count($priceChanges); $i++) {
 							    $key = $priceChanges[$i]->key;
 								$value = $priceChanges[$i]->value;
@@ -162,13 +163,14 @@ class Bubble_Api_Helper_Catalog_Product extends Mage_Core_Helper_Abstract
 								preg_match('/(.*)PRICE:(.*)/', $value, $regexResult);
 								$optionTxt = $regexResult[1];
 								$optionPrice = $regexResult[2];
-								$priceChanges[$key] = array(
-								    $optionTxt => $optionPrice
-								);
+								$priceChangesValues[$key][$optionTxt] = $optionPrice;
+							}
+							foreach($priceChangesValues as $values) {
+							    $priceChanges[$key] = $values;
 							}
 						} catch (Exception $e){}
 					}
-					// 
+					// **
                     if (!empty($priceChanges) && isset($priceChanges[$attributeCode])) {
                         $optionText = $product->getResource()
                             ->getAttribute($attribute['attribute_code'])
